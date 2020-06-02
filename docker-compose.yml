@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  server:
+    build: ./
+    restart: always
+    command: "node main.js"
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/app
