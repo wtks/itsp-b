@@ -5,12 +5,15 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "node main.js"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
     "url": "yashi_hub:wtks/itsp-b.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }
