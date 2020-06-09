@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  server:
+    build: ./
+    restart: always
+    command: "npm start"
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/app
