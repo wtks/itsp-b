@@ -2,8 +2,10 @@ const http = require("http");
 const fs = require('fs');
 const axios = require('axios');
 const express = require('express');
+const cors = require('cors')
 
 const app = express();
+app.use(cors());
 app.use(express.static(__dirname + "/frontend/dist/"));
 app.get("/t", function(req, res){
 	axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
@@ -57,14 +59,14 @@ const server = http.createServer(function (req, res) {
 		case "/t":
 			axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
 				.then(r => {
-					res.writeHead(200, { "Content-Type": "application/json charset=utf-8" })
+					res.writeHead(200, { "Content-Type": "application/json charset=utf-8", "Access-Control-Allow-Origin" :"*" })
 					res.end(JSON.stringify(r.data.title))
 				})
 			break
 		case "/a":
 			axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
 				.then(r => {
-					res.writeHead(200, {"Content-Type": "application/json charset=utf-8"})
+					res.writeHead(200, {"Content-Type": "application/json charset=utf-8", "Access-Control-Allow-Origin" :"*"})
 					const list = []
 					r.data.references.forEach(v => {
 						list.push(v.title)
@@ -75,7 +77,7 @@ const server = http.createServer(function (req, res) {
 		case "/b":
 			axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
 				.then(r => {
-					res.writeHead(200, {"Content-Type": "application/json charset=utf-8"})
+					res.writeHead(200, {"Content-Type": "application/json charset=utf-8", "Access-Control-Allow-Origin" :"*"})
 					const list = []
 					r.data.citations.forEach(v => {
 						list.push(v.title)
