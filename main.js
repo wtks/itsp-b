@@ -5,7 +5,7 @@ const express = require('express');
 const cors = require('cors')
 
 const app = express();
-app.use(cors);
+app.use(cors());
 app.use(express.static(__dirname + "/frontend/dist/"));
 app.get("/t", function(req, res){
 	axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
