@@ -1,7 +1,44 @@
 const http = require("http");
 const fs = require('fs');
 const axios = require('axios');
+const express = require('express');
 
+const app = express();
+app.use(express.static(__dirname + "/frontend/dist/"));
+app.get("/t", function(req, res){
+	axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
+		.then(r => {
+			res.writeHead(200, { "Content-Type": "application/json charset=utf-8" })
+			res.end(JSON.stringify(r.data.title))
+		})
+})
+app.get("/a", function(req, res){
+	axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
+		.then(r => {
+			res.writeHead(200, {"Content-Type": "application/json charset=utf-8"})
+			const list = []
+			r.data.references.forEach(v => {
+				list.push(v.title)
+			})
+			res.end(JSON.stringify(list))
+		})
+})
+app.get("/b", function(req, res){
+	axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
+		.then(r => {
+			res.writeHead(200, {"Content-Type": "application/json charset=utf-8"})
+			const list = []
+			r.data.citations.forEach(v => {
+				list.push(v.title)
+			})
+			res.end(JSON.stringify(list))
+		})
+})
+app.get(/.*/, function (req, res) {
+	res.sendFile(__dirname + "/index.html")
+});
+app.listen(8080);
+/*
 const server = http.createServer(function (req, res) {
 	switch (req.url) {
 		case "/":
@@ -47,4 +84,5 @@ const server = http.createServer(function (req, res) {
 				})
 			break
 	}
-}).listen(8080);
+}).listen(80);
+*/
