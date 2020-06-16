@@ -1,7 +1,15 @@
 const http = require("http");
 const fs = require('fs');
 const axios = require('axios');
+const express = require('express');
 
+const app = express();
+app.use(express.static(__dirname + "/frontend/dist/"));
+app.get(/.*/, function (req, res) {
+	res.sendFile(__dirname + "/index.html")
+});
+app.listen(8080);
+/*
 const server = http.createServer(function (req, res) {
 	switch (req.url) {
 		case "/":
@@ -48,3 +56,4 @@ const server = http.createServer(function (req, res) {
 			break
 	}
 }).listen(80);
+*/
