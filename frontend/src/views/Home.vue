@@ -1,40 +1,34 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="aaaaa to Your Vue.js App"/>
-    <div id="network"/>
+  <div class="home" style="height: 90vh">
+    <div id="network" style="height: 100%"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios'
 import { DataSet, Network } from 'vis-network/standalone'
 
 let network
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  },
-  mounted () {
+  components: {},
+  async mounted () {
+    const title = (await axios.get('http://localhost:8080/t')).data
+    const references = (await axios.get('http://localhost:8080/a')).data
+    // const citations = (await axios.get('http://localhost:8080/b')).data
+
     // create an array with nodes
-    const nodes = new DataSet([
-      { id: 1, label: 'Node 1' },
-      { id: 2, label: 'Node 2' },
-      { id: 3, label: 'Node 3' },
-      { id: 4, label: 'Node 4' },
-      { id: 5, label: 'Node 5' }
-    ])
+    const nodes = new DataSet([])
+
+    let id = 0
+    nodes.add([{ id: id++, label: title }])
+    references.forEach(v => nodes.add([{ id: id++, label: v, color: 'orange' }]))
+    // citations.forEach(v => nodes.add([{ id: id++, label: v }]))
 
     // create an array with edges
-    const edges = new DataSet([
-      { from: 1, to: 3 },
-      { from: 1, to: 2 },
-      { from: 2, to: 4 },
-      { from: 2, to: 5 }
-    ])
+    const edges = new DataSet([])
 
     // create a network
     const container = document.getElementById('network')
