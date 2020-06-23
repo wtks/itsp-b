@@ -16,8 +16,6 @@ export default {
   components: {},
   async mounted () {
     const paperData = (await axios.get('http://localhost:8080/t')).data
-    // const references = (await axios.get('http://localhost:8080/a')).data
-    // const citations = (await axios.get('http://localhost:8080/b')).data
 
     // create an array with nodes
     const nodes = new DataSet([])
