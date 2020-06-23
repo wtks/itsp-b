@@ -15,33 +15,34 @@ export default {
   name: 'Home',
   components: {},
   async mounted () {
-    const title = (await axios.get('http://localhost:8080/t')).data
-    const references = (await axios.get('http://localhost:8080/a')).data
+    const paperData = (await axios.get('http://localhost:8080/t')).data
+    // const references = (await axios.get('http://localhost:8080/a')).data
     // const citations = (await axios.get('http://localhost:8080/b')).data
 
     // create an array with nodes
     const nodes = new DataSet([])
 
-    let id = 0
-    nodes.add([{ id: id++, label: title }])
-    references.forEach(v => nodes.add([{ id: id++, label: v, color: 'orange' }]))
+    // let id = 0
+    nodes.add([{ id: paperData.paperId, label: paperData.title }])
+    paperData.references.forEach(v => nodes.add([{ id: v.paperId, label: v.title, color: 'orange' }]))
     // citations.forEach(v => nodes.add([{ id: id++, label: v }]))
 
     // create an array with edges
     const edges = new DataSet([])
+    paperData.references.forEach(v => edges.add([{ from: paperData.paperId, to: v.paperId, arrows: 'to' }]))
 
     // create a network
     const container = document.getElementById('network')
 
     // provide the data in the vis format
-    const data = {
+    const graph = {
       nodes: nodes,
       edges: edges
     }
     const options = {}
 
     // initialize your network!
-    network = new Network(container, data, options)
+    network = new Network(container, graph, options)
 
     network.unselectAll()
   }
