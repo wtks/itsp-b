@@ -39,18 +39,17 @@ export default {
     paperData.citations
       .filter(v => v.isInfluential)
       .forEach(v => {
-          nodes.add([{
-            id: v.paperId,
-            title: v.title,
-            color: 'red'
-          }])
-          edges.add([{
-            from: paperData.paperId,
-            to: v.paperId,
-            arrows: 'from'
-          }])
-        }
-      )
+        nodes.add([{
+          id: v.paperId,
+          title: v.title,
+          color: 'red'
+        }])
+        edges.add([{
+          from: paperData.paperId,
+          to: v.paperId,
+          arrows: 'from'
+        }])
+      })
 
     // create a network
     const container = document.getElementById('network')
