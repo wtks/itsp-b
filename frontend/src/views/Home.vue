@@ -1,6 +1,12 @@
 <template>
-  <div class="home" style="height: 90vh">
-    <div id="network" style="height: 100%"/>
+  <div>
+    <div>
+      <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
+      <label for="isFiltered">フィルタリング</label>
+    </div>
+    <div class="home" style="height: 90vh">
+      <div id="network" style="height: 100%"/>
+    </div>
   </div>
 </template>
 
@@ -14,6 +20,16 @@ let network
 export default {
   name: 'Home',
   components: {},
+  data: function () {
+    return {
+      isChecked: false
+    }
+  },
+  watch: {
+    isChecked: function (val) {
+
+    }
+  },
   async mounted () {
     const paperData = (await axios.get('http://localhost:8080/t')).data
 
