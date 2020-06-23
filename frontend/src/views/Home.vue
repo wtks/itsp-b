@@ -19,15 +19,35 @@ export default {
 
     // create an array with nodes
     const nodes = new DataSet([])
-
-    nodes.add([{ id: paperData.paperId, label: paperData.title }])
-    paperData.references.forEach(v => nodes.add([{ id: v.paperId, label: v.title, color: 'orange' }]))
-    paperData.citations.forEach(v => nodes.add([{ id: v.paperId, label: v.title, color: 'red' }]))
-
-    // create an array with edges
     const edges = new DataSet([])
-    paperData.references.forEach(v => edges.add([{ from: paperData.paperId, to: v.paperId, arrows: 'to' }]))
-    paperData.citations.forEach(v => edges.add([{ from: paperData.paperId, to: v.paperId, arrows: 'from' }]))
+
+    nodes.add([{ id: paperData.paperId, title: paperData.title }])
+    paperData.references
+      .forEach(v => {
+        nodes.add([{
+          id: v.paperId,
+          title: v.title,
+          color: 'orange'
+        }])
+        edges.add([{
+          from: paperData.paperId,
+          to: v.paperId,
+          arrows: 'to'
+        }])
+      })
+    paperData.citations
+      .forEach(v => {
+        nodes.add([{
+          id: v.paperId,
+          title: v.title,
+          color: 'red'
+        }])
+        edges.add([{
+          from: paperData.paperId,
+          to: v.paperId,
+          arrows: 'from'
+        }])
+      })
 
     // create a network
     const container = document.getElementById('network')
