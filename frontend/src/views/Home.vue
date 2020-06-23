@@ -15,20 +15,21 @@ export default {
   name: 'Home',
   components: {},
   async mounted () {
-    const title = (await axios.get('http://localhost:8080/t')).data
-    const references = (await axios.get('http://localhost:8080/a')).data
+    const data = (await axios.get('http://localhost:8080/t')).data
+    // const references = (await axios.get('http://localhost:8080/a')).data
     // const citations = (await axios.get('http://localhost:8080/b')).data
 
     // create an array with nodes
     const nodes = new DataSet([])
 
-    let id = 0
-    nodes.add([{ id: id++, label: title }])
-    references.forEach(v => nodes.add([{ id: id++, label: v, color: 'orange' }]))
+    // let id = 0
+    nodes.add([{ id: data.paperId, label: data.title }])
+    data.citations.forEach(v => nodes.add([{ id: v.paperId, label: v.title, color: 'orange' }]))
     // citations.forEach(v => nodes.add([{ id: id++, label: v }]))
 
     // create an array with edges
     const edges = new DataSet([])
+    data.citations.forEach(v => edges.add([{from:data.paperId, to:v.paperId, arrows:'to'}]))
 
     // create a network
     const container = document.getElementById('network')
