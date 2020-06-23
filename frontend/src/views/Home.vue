@@ -24,12 +24,12 @@ export default {
 
     // let id = 0
     nodes.add([{ id: paperData.paperId, label: paperData.title }])
-    paperData.citations.forEach(v => nodes.add([{ id: v.paperId, label: v.title, color: 'orange' }]))
+    paperData.references.forEach(v => nodes.add([{ id: v.paperId, label: v.title, color: 'orange' }]))
     // citations.forEach(v => nodes.add([{ id: id++, label: v }]))
 
     // create an array with edges
     const edges = new DataSet([])
-    paperData.citations.forEach(v => edges.add([{ from: paperData.paperId, to: v.paperId, arrows: 'to' }]))
+    paperData.references.forEach(v => edges.add([{ from: paperData.paperId, to: v.paperId, arrows: 'to' }]))
 
     // create a network
     const container = document.getElementById('network')
