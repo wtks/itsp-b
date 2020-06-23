@@ -23,7 +23,6 @@ export default {
 
     nodes.add([{ id: paperData.paperId, title: paperData.title }])
     paperData.references
-      .filter(v => v.isInfluential)
       .forEach(v => {
         nodes.add([{
           id: v.paperId,
@@ -37,7 +36,6 @@ export default {
         }])
       })
     paperData.citations
-      .filter(v => v.isInfluential)
       .forEach(v => {
         nodes.add([{
           id: v.paperId,
