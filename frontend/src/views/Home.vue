@@ -16,6 +16,8 @@ import axios from 'axios'
 import { DataSet, Network } from 'vis-network/standalone'
 
 let network
+const nodes = new DataSet([])
+const edges = new DataSet([])
 
 export default {
   name: 'Home',
@@ -27,16 +29,14 @@ export default {
   },
   watch: {
     isChecked: function (val) {
-
+      
     }
   },
   async mounted () {
     const paperData = (await axios.get('http://localhost:8080/t')).data
 
     // create an array with nodes
-    const nodes = new DataSet([])
-    const edges = new DataSet([])
-
+    const uninfluentialPapers = []
     nodes.add([{ id: paperData.paperId, title: paperData.title }])
     paperData.references
       .forEach(v => {
@@ -50,6 +50,9 @@ export default {
           to: v.paperId,
           arrows: 'to'
         }])
+        if (!v.isInfluential) {
+          uninfluentialPapers.push(v.paperId)
+        }
       })
     paperData.citations
       .forEach(v => {
@@ -79,6 +82,16 @@ export default {
     network = new Network(container, graph, options)
 
     network.unselectAll()
+
+    function temp_update(){
+      const updateNodes = []
+
+      for (let uninfluentialNodeId of uninfluentialPapers){
+        updateNodes.push({id: uninfluentialNode, hidden:isChecked})
+      }
+      nodes.update(updateNodes)
+      // edges.update()は不要？？
+    }
   }
 }
 </script>
