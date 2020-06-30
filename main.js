@@ -14,6 +14,18 @@ app.get("/t", function(req, res){
 			res.end(JSON.stringify(r.data))
 		})
 })
+app.get("/t/:paperId([0-9a-f]{40})", function(req, res){
+	const paperId = req.params.paperId
+	axios.get(`http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/${paperId}`)
+		.then(r => {
+			res.writeHead(200, { "Content-Type": "application/json charset=utf-8" })
+			res.end(JSON.stringify(r.data))
+		})
+		.catch(error => {
+			res.writeHead(error.response.status)
+			res.end()
+		})
+})
 app.get("/a", function(req, res){
 	axios.get('http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/0796f6cd7f0403a854d67d525e9b32af3b277331')
 		.then(r => {
