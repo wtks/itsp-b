@@ -4,6 +4,10 @@
       <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
       <label for="isFiltered">フィルタリング</label>
     </div>
+    <div>
+      <input type="checkbox" id="isHierarchy" name="isHierarchy" v-model="isHierarchyChecked">
+      <label for="isHierarchy">階層表示</label>
+    </div>
     <div class="home" style="height: 90vh">
       <div id="network" style="height: 100%"/>
     </div>
@@ -25,7 +29,8 @@ export default {
   components: {},
   data: function () {
     return {
-      isChecked: false
+      isChecked: false,
+      isHierarchyChecked: false
     }
   },
   watch: {
@@ -37,6 +42,25 @@ export default {
       }
       nodes.update(updateNodes)
       // edges.update()は不要？？
+    },
+    isHierarchyChecked: function (val) {
+      const options = {
+        layout: {
+          randomSeed: undefined,
+          improvedLayout: true,
+          hierarchical: {
+            enabled: val,
+            nodeSpacing: 100,
+            treeSpacing: 200,
+            blockShifting: true,
+            edgeMinimization: true,
+            parentCentralization: true,
+            direction: 'UD', // UD, DU, LR, RL
+            sortMethod: 'directed' // hubsize, directed
+          }
+        }
+      }
+      network.setOptions(options)
     }
   },
   async mounted () {
@@ -68,9 +92,9 @@ export default {
           color: 'red'
         }])
         edges.add([{
-          from: paperData.paperId,
-          to: v.paperId,
-          arrows: 'from'
+          from: v.paperId,
+          to: paperData.paperId,
+          arrows: 'to'
         }])
         if (!v.isInfluential) {
           uninfluentialPapers.push(v.paperId)
