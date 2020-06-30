@@ -1,6 +1,12 @@
 <template>
-  <div class="home" style="height: 90vh">
-    <div id="network" style="height: 100%"/>
+  <div>
+    <div>
+      <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
+      <label for="isFiltered">フィルタリング</label>
+    </div>
+    <div class="home" style="height: 90vh">
+      <div id="network" style="height: 100%"/>
+    </div>
   </div>
 </template>
 
@@ -10,17 +16,33 @@ import axios from 'axios'
 import { DataSet, Network } from 'vis-network/standalone'
 
 let network
+const nodes = new DataSet([])
+const edges = new DataSet([])
+const uninfluentialPapers = []
 
 export default {
   name: 'Home',
   components: {},
+  data: function () {
+    return {
+      isChecked: false
+    }
+  },
+  watch: {
+    isChecked: function (val) {
+      const updateNodes = []
+
+      for (const uninfluentialNodeId of uninfluentialPapers) {
+        updateNodes.push({ id: uninfluentialNodeId, hidden: val })
+      }
+      nodes.update(updateNodes)
+      // edges.update()は不要？？
+    }
+  },
   async mounted () {
     const paperData = (await axios.get('http://localhost:8080/t')).data
 
     // create an array with nodes
-    const nodes = new DataSet([])
-    const edges = new DataSet([])
-
     nodes.add([{ id: paperData.paperId, title: paperData.title }])
     paperData.references
       .forEach(v => {
@@ -34,6 +56,9 @@ export default {
           to: v.paperId,
           arrows: 'to'
         }])
+        if (!v.isInfluential) {
+          uninfluentialPapers.push(v.paperId)
+        }
       })
     paperData.citations
       .forEach(v => {
@@ -47,6 +72,9 @@ export default {
           to: v.paperId,
           arrows: 'from'
         }])
+        if (!v.isInfluential) {
+          uninfluentialPapers.push(v.paperId)
+        }
       })
 
     // create a network
