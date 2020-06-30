@@ -64,43 +64,6 @@ export default {
     }
   },
   async mounted () {
-    const paperData = (await axios.get('http://localhost:8080/t')).data
-
-    // create an array with nodes
-    nodes.add([{ id: paperData.paperId, title: paperData.title }])
-    paperData.references
-      .forEach(v => {
-        nodes.add([{
-          id: v.paperId,
-          title: v.title,
-          color: 'orange'
-        }])
-        edges.add([{
-          from: paperData.paperId,
-          to: v.paperId,
-          arrows: 'to'
-        }])
-        if (!v.isInfluential) {
-          uninfluentialPapers.push(v.paperId)
-        }
-      })
-    paperData.citations
-      .forEach(v => {
-        nodes.add([{
-          id: v.paperId,
-          title: v.title,
-          color: 'red'
-        }])
-        edges.add([{
-          from: v.paperId,
-          to: paperData.paperId,
-          arrows: 'to'
-        }])
-        if (!v.isInfluential) {
-          uninfluentialPapers.push(v.paperId)
-        }
-      })
-
     // create a network
     const container = document.getElementById('network')
 
@@ -114,7 +77,64 @@ export default {
     // initialize your network!
     network = new Network(container, graph, options)
 
-    network.unselectAll()
+    this.createGraph('4be293210f1a0dc14cf002a0069cf61d494d7eb2')
+
+    network.on('doubleClick', (e) => {
+      if (e.nodes.length > 0) {
+        this.createGraph(e.nodes[0])
+      }
+    })
+  },
+  methods: {
+    createGraph: async function (paperId) {
+      const paperData = (await axios.get(`http://localhost:8080/t/${paperId}`)).data
+
+      nodes.clear()
+      edges.clear()
+      uninfluentialPapers.length = 0
+
+      // create an array with nodes
+      nodes.add([{ id: paperData.paperId, title: paperData.title }])
+      paperData.references
+        .forEach(v => {
+          nodes.add([{
+            id: v.paperId,
+            title: v.title,
+            color: 'orange',
+            hidden: this.isChecked && !v.isInfluential
+          }])
+          edges.add([{
+            from: paperData.paperId,
+            to: v.paperId,
+            arrows: 'to'
+          }])
+          if (!v.isInfluential) {
+            uninfluentialPapers.push(v.paperId)
+          }
+        })
+      paperData.citations
+        .forEach(v => {
+          nodes.add([{
+            id: v.paperId,
+            title: v.title,
+            color: 'red',
+            hidden: this.isChecked && !v.isInfluential
+          }])
+          edges.add([{
+            from: v.paperId,
+            to: paperData.paperId,
+            arrows: 'to'
+          }])
+          if (!v.isInfluential) {
+            uninfluentialPapers.push(v.paperId)
+          }
+        })
+
+      network.setData({
+        nodes: nodes,
+        edges: edges
+      })
+    }
   }
 }
 </script>
