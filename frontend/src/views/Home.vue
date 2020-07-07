@@ -9,16 +9,20 @@
       <label for="isHierarchy">階層表示</label>
     </div>
     <div>
-      <!-- memo
-      [ DOI ] (表示) // エラーはアラートで
-        -->
       <form v-on:submit.prevent="onButtonClicked">
         <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
         <button>表示</button>
       </form>
     </div>
-    <div class="home" style="height: 90vh">
+    <div class="home" style="height: 90vh; width: 78vw; display: inline-block;">
       <div id="network" style="height: 100%"/>
+    </div>
+    <div style="height: 90vh; width: 18vw; display: inline-block; overflow: scroll;">
+      <ul>
+        <li v-for="paper in history" :key="paper.paperId">
+          {{ paper.title }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -69,6 +73,9 @@ export default {
             direction: 'UD', // UD, DU, LR, RL
             sortMethod: 'directed' // hubsize, directed
           }
+        },
+        physics: {
+          enabled: false
         }
       }
       network.setOptions(options)
@@ -83,7 +90,11 @@ export default {
       nodes: nodes,
       edges: edges
     }
-    const options = {}
+    const options = {
+      physics: {
+        enabled: false
+      }
+    }
 
     // initialize your network!
     network = new Network(container, graph, options)
@@ -155,13 +166,13 @@ export default {
       this.createGraph(paperData)
 
       const updateNodes = []
-      updateNodes.push({ id: this.history[this.history.length - 2], shape: 'diamond' })
+      updateNodes.push({ id: this.history[this.history.length - 2].paperId, shape: 'diamond' })
       nodes.update(updateNodes)
     },
     search: async function (queryText) {
       try {
         const res = (await axios.get(`http://localhost:8080/t/${queryText}`))
-        this.history.push(res.data.paperId)
+        this.history.push(res.data)
         return res.data
       } catch (e) {
         console.log(e)
@@ -169,7 +180,7 @@ export default {
       }
     },
     onButtonClicked: async function (queryText) {
-      this.history = []
+      this.history.splice(-this.history.length)
       const paperData = (await this.search(this.queryText))
 
       if (!paperData) {
