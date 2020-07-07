@@ -11,6 +11,13 @@
     <div class="home" style="height: 90vh">
       <div id="network" style="height: 100%"/>
     </div>
+    <div>
+      <!-- memo
+      [ DOI ] (表示) // エラーはアラートで
+        -->
+      <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
+      <button v-on:click="console.log(1)">表示</button>
+    </div>
   </div>
 </template>
 
@@ -134,6 +141,9 @@ export default {
         nodes: nodes,
         edges: edges
       })
+    },
+    search: async function (queryText) {
+      // const paperId = (await axios.get(`http://localhost:8080/t/${queryText}`)).data
     }
   }
 }
