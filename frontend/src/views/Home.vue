@@ -8,6 +8,15 @@
       <input type="checkbox" id="isHierarchy" name="isHierarchy" v-model="isHierarchyChecked">
       <label for="isHierarchy">階層表示</label>
     </div>
+    <div>
+      <!-- memo
+      [ DOI ] (表示) // エラーはアラートで
+        -->
+      <form v-on:submit.prevent="onButtonClicked" >
+        <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
+        <button>表示</button>
+      </form>
+    </div>
     <div class="home" style="height: 90vh">
       <div id="network" style="height: 100%"/>
     </div>
@@ -30,7 +39,8 @@ export default {
   data: function () {
     return {
       isChecked: false,
-      isHierarchyChecked: false
+      isHierarchyChecked: false,
+      queryText: ''
     }
   },
   watch: {
@@ -77,63 +87,87 @@ export default {
     // initialize your network!
     network = new Network(container, graph, options)
 
-    this.createGraph('4be293210f1a0dc14cf002a0069cf61d494d7eb2')
-
-    network.on('doubleClick', (e) => {
+    network.on('doubleClick', async (e) => {
       if (e.nodes.length > 0) {
-        this.createGraph(e.nodes[0])
+        const paperData = await this.search(e.nodes[0])
+        if (paperData) {
+          this.createGraph(paperData)
+        } else {
+          alert('サーバにエラーがありました。')
+        }
       }
     })
   },
   methods: {
-    createGraph: async function (paperId) {
-      const paperData = (await axios.get(`http://localhost:8080/t/${paperId}`)).data
-
+    createGraph: function (paperData) {
       nodes.clear()
       edges.clear()
       uninfluentialPapers.length = 0
 
       // create an array with nodes
       nodes.add([{ id: paperData.paperId, title: paperData.title }])
-      paperData.references
-        .forEach(v => {
-          nodes.add([{
-            id: v.paperId,
-            title: v.title,
-            color: 'orange',
-            hidden: this.isChecked && !v.isInfluential
-          }])
-          edges.add([{
-            from: paperData.paperId,
-            to: v.paperId,
-            arrows: 'to'
-          }])
-          if (!v.isInfluential) {
-            uninfluentialPapers.push(v.paperId)
-          }
-        })
-      paperData.citations
-        .forEach(v => {
-          nodes.add([{
-            id: v.paperId,
-            title: v.title,
-            color: 'red',
-            hidden: this.isChecked && !v.isInfluential
-          }])
-          edges.add([{
-            from: v.paperId,
-            to: paperData.paperId,
-            arrows: 'to'
-          }])
-          if (!v.isInfluential) {
-            uninfluentialPapers.push(v.paperId)
-          }
-        })
+      if (paperData.references) {
+        paperData.references
+          .forEach(v => {
+            nodes.add([{
+              id: v.paperId,
+              title: v.title,
+              color: 'orange',
+              hidden: this.isChecked && !v.isInfluential
+            }])
+            edges.add([{
+              from: paperData.paperId,
+              to: v.paperId,
+              arrows: 'to'
+            }])
+            if (!v.isInfluential) {
+              uninfluentialPapers.push(v.paperId)
+            }
+          })
+      }
+      if (paperData.citations) {
+        paperData.citations
+          .forEach(v => {
+            nodes.add([{
+              id: v.paperId,
+              title: v.title,
+              color: 'red',
+              hidden: this.isChecked && !v.isInfluential
+            }])
+            edges.add([{
+              from: v.paperId,
+              to: paperData.paperId,
+              arrows: 'to'
+            }])
+            if (!v.isInfluential) {
+              uninfluentialPapers.push(v.paperId)
+            }
+          })
+      }
 
       network.setData({
         nodes: nodes,
         edges: edges
       })
+    },
+    search: async function (queryText) {
+      try {
+        const res = (await axios.get(`http://localhost:8080/t/${queryText}`))
+        return res.data
+      } catch (e) {
+        console.log(e)
+        return null
+      }
+    },
+    onButtonClicked: async function (queryText) {
+      const paperData = (await this.search(this.queryText))
+
+      if (!paperData) {
+        alert('該当する結果がありませんでした。')
+        return
+      }
+
+      this.createGraph(paperData)
     }
   }
 }
