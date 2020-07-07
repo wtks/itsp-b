@@ -12,9 +12,9 @@
       <!-- memo
       [ DOI ] (表示) // エラーはアラートで
         -->
-      <form>
+      <form v-on:submit.prevent="onButtonClicked" >
         <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
-        <button v-on:click="onButtonClicked">表示</button>
+        <button>表示</button>
       </form>
     </div>
     <div class="home" style="height: 90vh">
