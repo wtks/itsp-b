@@ -12,7 +12,7 @@
       <!-- memo
       [ DOI ] (表示) // エラーはアラートで
         -->
-      <form v-on:submit.prevent="onButtonClicked" >
+      <form v-on:submit.prevent="onButtonClicked">
         <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
         <button>表示</button>
       </form>
@@ -40,7 +40,8 @@ export default {
     return {
       isChecked: false,
       isHierarchyChecked: false,
-      queryText: ''
+      queryText: '',
+      history: []
     }
   },
   watch: {
@@ -91,7 +92,7 @@ export default {
       if (e.nodes.length > 0) {
         const paperData = await this.search(e.nodes[0])
         if (paperData) {
-          this.createGraph(paperData)
+          this.updateGraph(paperData)
         } else {
           alert('サーバにエラーがありました。')
         }
@@ -150,9 +151,17 @@ export default {
         edges: edges
       })
     },
+    updateGraph: function (paperData) {
+      this.createGraph(paperData)
+
+      const updateNodes = []
+      updateNodes.push({ id: this.history[this.history.length - 2], shape: 'diamond' })
+      nodes.update(updateNodes)
+    },
     search: async function (queryText) {
       try {
         const res = (await axios.get(`http://localhost:8080/t/${queryText}`))
+        this.history.push(res.data.paperId)
         return res.data
       } catch (e) {
         console.log(e)
@@ -160,6 +169,7 @@ export default {
       }
     },
     onButtonClicked: async function (queryText) {
+      this.history = []
       const paperData = (await this.search(this.queryText))
 
       if (!paperData) {

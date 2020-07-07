@@ -9,6 +9,7 @@ app.get("/t/:paperId([^/]*)", function(req, res){
 	const paperId = req.params.paperId
 	axios.get(`http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/v1/paper/${paperId}`)
 		.then(r => {
+			res.set('Cache-Control', 'max-age=3600')
 			res.status(200).json(r.data)
 		})
 		.catch(error => {
