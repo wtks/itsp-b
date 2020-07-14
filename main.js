@@ -21,7 +21,15 @@ app.get("/t/:paperId([^/]*)", function (req, res) {
 app.get("/s/:keyword", function (req, res) {
 	const keyword = req.params.keyword
 	const num = 10	// 最大件数
-	axios.get(`https://dblp.org/search/publ/api?format=json&c=0&h=${num}&q=${keyword}`)
+	axios.get('https://dblp.org/search/publ/api',
+		{
+			params: {
+				format: "json",
+				c: 0,
+				h: num,
+				q: keyword
+			}
+		})
 		.then(r => {
 			const hitTotal = r.data.result.hits['@total']
 			let papers
