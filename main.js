@@ -33,7 +33,9 @@ app.get("/s/:keyword", function (req, res) {
 						return doi !== undefined
 					})
 					.map(paper => {
-						const authors = paper.info.authors.author.map(v => v.text)
+						const rawAuthor = paper.info.authors.author
+						const authors = (Array.isArray(rawAuthor) ? rawAuthor : [rawAuthor])
+							.map(v => v.text)
 						return {
 							title: paper.info.title,
 							authors: authors,
