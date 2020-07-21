@@ -192,7 +192,7 @@ export default {
     },
     createGraphFromQueryText: async function (queryText) {
       this.history.splice(-this.history.length)
-      const paperData = (await this.search(this.queryText))
+      const paperData = (await this.search(queryText))
 
       if (!paperData) {
         alert('該当する結果がありませんでした。')
