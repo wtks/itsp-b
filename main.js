@@ -20,7 +20,7 @@ app.get("/t/:paperId([^/]*)", function (req, res) {
 // {title: str, authors: str, doi: str, year: str} のリストを返す
 app.get("/s/:keyword", function (req, res) {
 	const keyword = req.params.keyword
-	const num = 10	// 最大件数
+	const num = 100	// 最大件数
 	axios.get('https://dblp.org/search/publ/api',
 		{
 			params: {
