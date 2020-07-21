@@ -17,9 +17,9 @@ if [[ $1 = dev || $1 = build ]]; then
     start_or_restart_docker
     cd ./frontend
     if [[ $1 = dev ]]; then
-        npm run serve
+        npm run serve --fix
     else
-        npm run build
+        npm run build --fix
     fi
 elif [[ $1 = down ]]; then
     docker-compose down -v
