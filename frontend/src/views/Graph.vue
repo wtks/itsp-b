@@ -80,7 +80,7 @@ export default {
       }
       network.setOptions(options)
     },
-    $route: 'initialize'
+    '$route': initialize
   },
   async mounted () {
     // create a network
