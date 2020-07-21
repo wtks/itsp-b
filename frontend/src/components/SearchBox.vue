@@ -27,7 +27,7 @@ export default {
       if (this.searchOption === 'keyword') {
         this.$router.push({ name: 'SearchResult', query: { q: this.queryText } })
       } else if (this.searchOption === 'doi') {
-        this.$router.push({ name: 'Home', query: { id: this.queryText } })
+        this.$router.push({ name: 'Graph', query: { id: this.queryText } })
       }
     }
   },
