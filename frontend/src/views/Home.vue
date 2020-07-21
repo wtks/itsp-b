@@ -9,7 +9,7 @@
       <label for="isHierarchy">階層表示</label>
     </div>
     <div>
-      <form v-on:submit.prevent="onButtonClicked">
+      <form v-on:submit.prevent="createGraphFromQueryText">
         <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
         <button>表示</button>
       </form>
@@ -109,6 +109,11 @@ export default {
         }
       }
     })
+
+    if (this.$route.query.id) {
+      const doi = this.$route.query.id
+      this.createGraphFromQueryText(doi)
+    }
   },
   methods: {
     createGraph: function (paperData) {
@@ -185,9 +190,9 @@ export default {
         return null
       }
     },
-    onButtonClicked: async function (queryText) {
+    createGraphFromQueryText: async function (queryText) {
       this.history.splice(-this.history.length)
-      const paperData = (await this.search(this.queryText))
+      const paperData = (await this.search(queryText))
 
       if (!paperData) {
         alert('該当する結果がありませんでした。')
