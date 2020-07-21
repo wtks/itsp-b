@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Graph from '../views/Graph.vue'
+import Results from '../views/Results.vue'
 
 Vue.use(VueRouter)
 
@@ -14,7 +15,12 @@ const routes = [
   {
     path: '/graph',
     name: 'Graph',
-    component: Home
+    component: Graph
+  },
+  {
+    path: '/search',
+    name: 'SearchResult',
+    component: Results
   }
 ]
 
