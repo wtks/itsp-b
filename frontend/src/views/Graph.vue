@@ -9,10 +9,7 @@
       <label for="isHierarchy">階層表示</label>
     </div>
     <div>
-      <form v-on:submit.prevent="createGraphFromQueryText">
-        <input v-model="queryText" id="queryText" placeholder="10.1109/5.771073">
-        <button>表示</button>
-      </form>
+      <search-box />
     </div>
     <div class="home" style="height: 90vh; width: 78vw; display: inline-block;">
       <div id="network" style="height: 100%"/>
@@ -31,6 +28,7 @@
 // @ is an alias to /src
 import axios from 'axios'
 import { DataSet, Network } from 'vis-network/standalone'
+import SearchBox from '../components/SearchBox.vue'
 
 let network
 const nodes = new DataSet([])
@@ -39,7 +37,9 @@ const uninfluentialPapers = []
 
 export default {
   name: 'Home',
-  components: {},
+  components: {
+    SearchBox
+  },
   data: function () {
     return {
       isChecked: false,
@@ -79,7 +79,8 @@ export default {
         }
       }
       network.setOptions(options)
-    }
+    },
+    $route: 'initialize'
   },
   async mounted () {
     // create a network
@@ -110,10 +111,7 @@ export default {
       }
     })
 
-    if (this.$route.query.id) {
-      const doi = this.$route.query.id
-      this.createGraphFromQueryText(doi)
-    }
+    this.initialize()
   },
   methods: {
     createGraph: function (paperData) {
@@ -200,6 +198,12 @@ export default {
       }
 
       this.createGraph(paperData)
+    },
+    initialize: async function () {
+      if (this.$route.query.id) {
+        const doi = this.$route.query.id
+        this.createGraphFromQueryText(doi)
+      }
     }
   }
 }
