@@ -173,6 +173,11 @@ export default {
   },
   methods: {
     createGraph: function (paperData) {
+      const formatAuthors = (authors) => {
+        if (authors.length === 0) return '(no name)'
+        else if (authors.length === 1) return authors[0].name
+        else return authors[0].name + ' et al.'
+      }
       this.history.push(paperData)
       nodes.clear()
       edges.clear()
@@ -183,7 +188,8 @@ export default {
         id: paperData.paperId,
         title: paperData.title,
         color: '#E0D4FF',
-        label: paperData.authors.length > 1 ? (paperData.authors[0]).name + ' et al.,' + paperData.year : (paperData.authors[0]).name + ',' + paperData.year
+        shape: 'diamond',
+        label: formatAuthors(paperData.authors) + ', ' + paperData.year
       }])
       if (paperData.references) {
         paperData.references
@@ -192,7 +198,7 @@ export default {
               id: v.paperId,
               title: v.title,
               color: '#FFE0D4',
-              label: v.authors.length > 1 ? (v.authors[0]).name + ' et al., ' + v.year : (v.authors[0]).name + ', ' + v.year,
+              label: formatAuthors(v.authors) + ', ' + v.year,
               hidden: this.isChecked && !v.isInfluential
             }])
             edges.add([{
@@ -212,7 +218,7 @@ export default {
               id: v.paperId,
               title: v.title,
               color: '#D4FFE0',
-              label: v.authors.length > 1 ? (v.authors[0]).name + ' et al., ' + v.year : (v.authors[0]).name + ', ' + v.year,
+              label: formatAuthors(v.authors) + ', ' + v.year,
               hidden: this.isChecked && !v.isInfluential
             }])
             edges.add([{
