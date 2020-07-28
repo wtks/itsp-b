@@ -1,18 +1,16 @@
 <template>
   <div>
-    <div id="nav">
-      <router-link to="/">Citemap</router-link>
+    <div id="nav" style="background-color: #426EFF; padding:2vw;">
+      <h1 style="display: inline-block; color: #F0F0F0">
+        <router-link style="color: #F0F0F0" to="/">Citemap</router-link>
+      </h1>
+      <search-box style="display: inline-block;" />
     </div>
     <div>
       <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
       <label for="isFiltered">フィルタリング</label>
-    </div>
-    <div>
       <input type="checkbox" id="isHierarchy" name="isHierarchy" v-model="isHierarchyChecked">
       <label for="isHierarchy">階層表示</label>
-    </div>
-    <div>
-      <search-box />
     </div>
     <div class="home" style="height: 90vh; width: 78vw; display: inline-block;">
       <div id="network" style="height: 100%"/>

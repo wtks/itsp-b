@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Citemap</h1>
+  <div style="background-color: #426EFF;">
+    <h1 style="color: #F0F0F0">Citemap</h1>
     <SearchBox/>
   </div>
 </template>
