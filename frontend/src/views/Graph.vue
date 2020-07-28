@@ -21,6 +21,12 @@
         </li>
       </ul>
     </div>
+    <div style="width: 100vw;">
+      <h2>{{ titlePaper }}</h2>
+      <p>{{ venueAndYearPaper }}</p>
+      <p>{{ authorPaper }}</p>
+      <p>{{ abstractPaper }}</p>
+    </div>
   </div>
 </template>
 
@@ -45,7 +51,8 @@ export default {
       isChecked: false,
       isHierarchyChecked: false,
       queryText: '',
-      history: []
+      history: [],
+      selectedPaper: null
     }
   },
   watch: {
@@ -111,7 +118,48 @@ export default {
       }
     })
 
+    network.on('click', async (e) => {
+      if (e.nodes.length > 0) {
+        const paperData = await this.search(e.nodes[0])
+        if (paperData) {
+          this.selectedPaper = paperData
+        } else {
+          alert('サーバにエラーがありました。')
+        }
+      }
+    })
+
     this.initialize()
+  },
+  computed: {
+    abstractPaper () {
+      if (this.selectedPaper) {
+        return this.selectedPaper.abstract
+      } else {
+        return ''
+      }
+    },
+    titlePaper () {
+      if (this.selectedPaper) {
+        return this.selectedPaper.title
+      } else {
+        return ''
+      }
+    },
+    venueAndYearPaper () {
+      if (this.selectedPaper) {
+        return `${this.selectedPaper.venue} ${this.selectedPaper.year}`
+      } else {
+        return ''
+      }
+    },
+    authorPaper () {
+      if (this.selectedPaper) {
+        return this.selectedPaper.authors.map(v => v.name).join(', ')
+      } else {
+        return ''
+      }
+    }
   },
   methods: {
     createGraph: function (paperData) {
