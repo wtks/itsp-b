@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div id="nav">
+      <router-link to="/">Citemap</router-link>
+    </div>
     <search-box />
     <ul>
       <li v-for="result in searchResults" :key="result.doi">

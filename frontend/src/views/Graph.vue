@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div id="nav">
+      <router-link to="/">Citemap</router-link>
+    </div>
     <div>
       <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
       <label for="isFiltered">フィルタリング</label>
