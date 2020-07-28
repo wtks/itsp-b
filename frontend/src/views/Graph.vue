@@ -110,6 +110,7 @@ export default {
     network.on('doubleClick', async (e) => {
       if (e.nodes.length > 0) {
         const paperData = await this.search(e.nodes[0])
+        this.history.push(paperData)
         if (paperData) {
           this.updateGraph(paperData)
         } else {
@@ -229,7 +230,6 @@ export default {
     search: async function (queryText) {
       try {
         const res = (await axios.get(`http://localhost:8080/t/${queryText}`))
-        this.history.push(res.data)
         return res.data
       } catch (e) {
         console.log(e)
@@ -239,6 +239,7 @@ export default {
     createGraphFromQueryText: async function (queryText) {
       this.history.splice(-this.history.length)
       const paperData = (await this.search(queryText))
+      this.history.push(paperData)
 
       if (!paperData) {
         alert('該当する結果がありませんでした。')
