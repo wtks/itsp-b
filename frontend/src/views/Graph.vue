@@ -182,6 +182,7 @@ export default {
       nodes.add([{
         id: paperData.paperId,
         title: paperData.title,
+        color: '#E0D4FF',
         label: paperData.authors.length > 1 ? (paperData.authors[0]).name + ' et al.,' + paperData.year : (paperData.authors[0]).name + ',' + paperData.year
       }])
       if (paperData.references) {
@@ -190,7 +191,7 @@ export default {
             nodes.add([{
               id: v.paperId,
               title: v.title,
-              color: 'orange',
+              color: '#FFE0D4',
               label: v.authors.length > 1 ? (v.authors[0]).name + ' et al., ' + v.year : (v.authors[0]).name + ', ' + v.year,
               hidden: this.isChecked && !v.isInfluential
             }])
@@ -210,7 +211,7 @@ export default {
             nodes.add([{
               id: v.paperId,
               title: v.title,
-              color: 'red',
+              color: '#D4FFE0',
               label: v.authors.length > 1 ? (v.authors[0]).name + ' et al., ' + v.year : (v.authors[0]).name + ', ' + v.year,
               hidden: this.isChecked && !v.isInfluential
             }])
