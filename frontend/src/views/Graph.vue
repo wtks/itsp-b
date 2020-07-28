@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div id="nav">
+      <router-link to="/">Citemap</router-link>
+    </div>
     <div>
       <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
       <label for="isFiltered">フィルタリング</label>
@@ -170,6 +173,11 @@ export default {
   },
   methods: {
     createGraph: function (paperData) {
+      const formatAuthors = (authors) => {
+        if (authors.length === 0) return '(no name)'
+        else if (authors.length === 1) return authors[0].name
+        else return authors[0].name + ' et al.'
+      }
       this.history.push(paperData)
       nodes.clear()
       edges.clear()
@@ -179,7 +187,9 @@ export default {
       nodes.add([{
         id: paperData.paperId,
         title: paperData.title,
-        label: paperData.authors.length > 1 ? (paperData.authors[0]).name + ' et al.,' + paperData.year : (paperData.authors[0]).name + ',' + paperData.year
+        color: '#E0D4FF',
+        shape: 'diamond',
+        label: formatAuthors(paperData.authors) + ', ' + paperData.year
       }])
       if (paperData.references) {
         paperData.references
@@ -187,8 +197,8 @@ export default {
             nodes.add([{
               id: v.paperId,
               title: v.title,
-              color: 'orange',
-              label: v.authors.length > 1 ? (v.authors[0]).name + ' et al., ' + v.year : (v.authors[0]).name + ', ' + v.year,
+              color: '#FFE0D4',
+              label: formatAuthors(v.authors) + ', ' + v.year,
               hidden: this.isChecked && !v.isInfluential
             }])
             edges.add([{
@@ -207,8 +217,8 @@ export default {
             nodes.add([{
               id: v.paperId,
               title: v.title,
-              color: 'red',
-              label: v.authors.length > 1 ? (v.authors[0]).name + ' et al., ' + v.year : (v.authors[0]).name + ', ' + v.year,
+              color: '#D4FFE0',
+              label: formatAuthors(v.authors) + ', ' + v.year,
               hidden: this.isChecked && !v.isInfluential
             }])
             edges.add([{
