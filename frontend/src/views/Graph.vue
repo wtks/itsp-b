@@ -22,7 +22,7 @@
       </ul>
     </div>
     <div style="width: 100vw;">
-      <h2>{{ titlePaper }}</h2>
+      <h2><a :href="linkToPaper" target="_blank" rel="noopener noreferrer">{{ titlePaper }}</a></h2>
       <p>{{ venueAndYearPaper }}</p>
       <p>{{ authorPaper }}</p>
       <p>{{ abstractPaper }}</p>
@@ -110,7 +110,6 @@ export default {
     network.on('doubleClick', async (e) => {
       if (e.nodes.length > 0) {
         const paperData = await this.search(e.nodes[0])
-        this.history.push(paperData)
         if (paperData) {
           this.updateGraph(paperData)
         } else {
@@ -160,10 +159,18 @@ export default {
       } else {
         return ''
       }
+    },
+    linkToPaper () {
+      if (this.selectedPaper) {
+        return this.selectedPaper.doi ? `https://doi.org/${this.selectedPaper.doi}` : this.selectedPaper.url
+      } else {
+        return ''
+      }
     }
   },
   methods: {
     createGraph: function (paperData) {
+      this.history.push(paperData)
       nodes.clear()
       edges.clear()
       uninfluentialPapers.length = 0
@@ -239,7 +246,6 @@ export default {
     createGraphFromQueryText: async function (queryText) {
       this.history.splice(-this.history.length)
       const paperData = (await this.search(queryText))
-      this.history.push(paperData)
 
       if (!paperData) {
         alert('該当する結果がありませんでした。')
