@@ -24,6 +24,14 @@
   text-decoration: none;
 }
 
+.block {
+  display: block;
+}
+
+.bg-lightblue {
+  background-color: #CFE2F2;
+}
+
 /* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

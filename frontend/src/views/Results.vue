@@ -1,22 +1,67 @@
 <template>
   <div>
-    <div id="nav">
-      <router-link to="/">Citemap</router-link>
+    <navigation />
+    <div class="bg-lightblue">
+      <div>
+        {{ searchResults.length }} 件見つかりました。
+      </div>
+      <ul>
+        <li v-for="result in searchResults" :key="result.doi">
+          <router-link tag="div" class="pointed-cursor result-item" :to="{ name: 'Graph', query: {id: result.doi}}">
+            <p class="title">{{ result.title }}</p>
+            <p class="authors">{{ result.authors.join(', ') }}</p>
+            <span class="year">{{ result.year }}</span>
+            <span class="doi">{{ result.doi }}</span>
+          </router-link>
+        </li>
+      </ul>
     </div>
-    <search-box />
-    <ul>
-      <li v-for="result in searchResults" :key="result.doi">
-        <router-link :to="{ name: 'Graph', query: {id: result.doi}}">
-        <span class="title">{{ result.title }}</span>,{{ result.authors }},{{ result.year }}. {{ result.doi }}
-        </router-link>
-      </li>
-    </ul>
   </div>
 </template>
 
+<style scoped>
+
+.title {
+  font-size: 22px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.authors {
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.year {
+  font-weight: bold;
+}
+
+.doi {
+  font-size: 50%;
+}
+
+li {
+  border-top: 1px solid grey;
+}
+
+.pointed-cursor {
+  cursor: pointer;
+}
+
+.result-item {
+  min-height: 13vh;
+  padding: 5px 10px;
+}
+
+</style>
+
 <script>
 import axios from 'axios'
-import SearchBox from '../components/SearchBox.vue'
+import Navigation from '../components/Navigation.vue'
 
 export default {
   data: function () {
@@ -25,7 +70,7 @@ export default {
     }
   },
   components: {
-    SearchBox
+    Navigation
   },
   watch: {
     $route: 'initialize'
