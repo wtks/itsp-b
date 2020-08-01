@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div id="nav" style="background-color: #426EFF; padding:2vw;">
-      <h1 style="display: inline-block; color: #F0F0F0">
-        <router-link style="color: #F0F0F0" to="/">Citemap</router-link>
-      </h1>
-      <search-box style="display: inline-block;" />
-    </div>
+    <navigation />
     <div>
       <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
       <label for="isFiltered">フィルタリング</label>
@@ -31,11 +26,14 @@
   </div>
 </template>
 
+<style scoped>
+</style>
+
 <script>
 // @ is an alias to /src
 import axios from 'axios'
 import { DataSet, Network } from 'vis-network/standalone'
-import SearchBox from '../components/SearchBox.vue'
+import Navigation from '../components/Navigation.vue'
 
 let network
 const nodes = new DataSet([])
@@ -45,7 +43,7 @@ const uninfluentialPapers = []
 export default {
   name: 'Home',
   components: {
-    SearchBox
+    Navigation
   },
   data: function () {
     return {

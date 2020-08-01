@@ -5,7 +5,7 @@
         <option value="keyword">キーワード</option>
         <option value="doi">doi</option>
       </select>
-      <input v-model="queryText" :placeholder="placeHolderText">
+      <input type="text" v-model="queryText" :placeholder="placeHolderText">
       <button>{{ searchOption === 'keyword' ? '検索' : '表示' }}</button>
     </form>
   </div>
@@ -39,3 +39,27 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+select {
+  border: 1px;
+}
+
+select, input[type="text"], button {
+  height: 34px;
+  font-size: 16px;
+  margin: 1px 2px;
+}
+
+input[type="text"] {
+  /* height: 27px; */
+  margin-right: 0;
+  width: 30vw;
+}
+
+button {
+  background-color: #CFE2F2;
+  border: none;
+  margin-left: 0;
+}
+</style>
