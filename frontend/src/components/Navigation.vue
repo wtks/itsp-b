@@ -23,7 +23,8 @@ export default {
 <style scoped>
 #nav {
   background-color: #426EFF;
-  padding:1vw;
+  padding: 1vh 1vw;
+  height: 7vh;
 }
 
 h1 {
