@@ -1,20 +1,22 @@
 <template>
-  <div style="background-color: #426EFF;">
+  <div class="container">
     <h1>Citemap</h1>
-    <SearchBox/>
+    <SearchBox />
   </div>
 </template>
 
 <style scoped>
 h1 {
-
-  margin:0 1vw;
+  margin: 15vh 0 3px 0;
   display: inline-block;
   color: #F0F0F0;
 }
 
-#search-box {
-  text-align:center;
+.container {
+  text-align: center;
+  background-color: #426EFF;
+  width: 100vw;
+  height: 100vh;
 }
 
 </style>
