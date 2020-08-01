@@ -1,23 +1,23 @@
 <template>
   <div>
     <navigation />
-    <div>
+    <div id="preferences">
       <input type="checkbox" id="isFiltered" name="isFiltered" v-model="isChecked">
       <label for="isFiltered">フィルタリング</label>
       <input type="checkbox" id="isHierarchy" name="isHierarchy" v-model="isHierarchyChecked">
       <label for="isHierarchy">階層表示</label>
     </div>
-    <div class="home" style="height: 90vh; width: 78vw; display: inline-block;">
-      <div id="network" style="height: 100%"/>
+    <div class="home">
+      <div id="network"/>
+      <div id="history" class="bg-lightblue">
+        <ul>
+          <li v-for="paper in history" :key="paper.paperId" class="history-item">
+            {{ paper.title }}
+          </li>
+        </ul>
+      </div>
     </div>
-    <div style="height: 90vh; width: 18vw; display: inline-block; overflow: scroll;">
-      <ul>
-        <li v-for="paper in history" :key="paper.paperId">
-          {{ paper.title }}
-        </li>
-      </ul>
-    </div>
-    <div style="width: 100vw;">
+    <div id="detail">
       <h2><a :href="linkToPaper" target="_blank" rel="noopener noreferrer">{{ titlePaper }}</a></h2>
       <p>{{ venueAndYearPaper }}</p>
       <p>{{ authorPaper }}</p>
@@ -27,6 +27,38 @@
 </template>
 
 <style scoped>
+.home {
+  height: 60vh;
+  width: auto;
+}
+#network {
+  height: 100%;
+  display: inline-block;
+  width: 80vw;
+}
+#history {
+  height: 60vh;
+  width: 18vw;
+  overflow: scroll;
+  float: right;
+}
+.history-item {
+  padding: 5px 10px;
+}
+li {
+  border: 1px solid grey;
+}
+#detail {
+  background-color: #DDD;
+  width: 100vw;
+  height: 33vh;
+  overflow: scroll;
+}
+
+#preferences {
+  text-align: center;
+}
+
 </style>
 
 <script>
