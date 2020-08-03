@@ -7,12 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node main.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "yashi_hub:wtks/itsp-b.git"
-  },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2",
     "cors": "^2.8.5",
