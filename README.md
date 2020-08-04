@@ -9,7 +9,7 @@
 
 が必要
 
-### インストール
+### ビルド
 ```shell
 npm i
 cd frontend/
